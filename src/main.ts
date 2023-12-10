@@ -288,7 +288,7 @@ const LogisticRegression = ZkProgram({
         }
 
         const z = dotProduct.add(intercept);
-        return sigmoid(z);
+        return Zigmoid(z);
     },
   },
 },
