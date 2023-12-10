@@ -268,4 +268,30 @@ methods: {
 //   },
 // },
 // });
+
+
+
+const LogisticRegression = ZkProgram({
+    name: 'LogisticRegression',
+    publicOutput: Field,
+  methods: {
+    predict: {
+      privateInputs: [Provable.Array(Field, 5)],
+
+      method(input: Field[]): Field {
+        const coefficients = [Field(175964519), Field(203090830)];
+        const intercept = new Field(-69312133);
+        let dotProduct = new Field(0);
+
+        for (let i = 0; i < coefficients.length; i++) {
+          dotProduct = dotProduct.add(coefficients[i].mul(input[i]));
+        }
+
+        const z = dotProduct.add(intercept);
+        return sigmoid(z);
+    },
+  },
+},
+});
+
 main();
