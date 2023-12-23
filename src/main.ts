@@ -184,20 +184,35 @@ methods: {
 },
 });
 
+// const Zigmoid = ZkProgram({
+//   name: 'Zigmoid',
+//   publicOutput: Field,
+// methods: {
+//   zigmoid: {
+//     privateInputs: [Field, Field],
+
+//     method(input, remainder): Field {
+//       const n = Field(1000000000); // Assuming n is 10^9
+//       remainder.assertLessThan(n.square().mul(1000000000));
+//       // 198695283 * n**2 - 1570683 * n * in - 4001354 * in * in;
+//       let tmp = n.square().mul(198695283).sub(input.mul(n).mul(1570683)).sub(input.square().mul(4001354));
+//       // return (502073021 * n**3 + in * tmp - remainder)/((n**2) * (10**9))
+//       return Field(502073021).mul(n).mul(n).mul(n).add(input.mul(tmp)).sub(remainder).div(n.square().mul(1000000000));
+//   },
+// },
+// },
+// });
+
+//Zigmoid 0.502073021 + 0.198695283 * x - 0.001570683 * x**2 - 0.004001354 * x**3
 const Zigmoid = ZkProgram({
   name: 'Zigmoid',
   publicOutput: Field,
 methods: {
   zigmoid: {
-    privateInputs: [Field, Field],
+    privateInputs: [Field],
 
-    method(input, remainder): Field {
-      const n = Field(1000000000); // Assuming n is 10^9
-      remainder.assertLessThan(n.square().mul(1000000000));
-      // 198695283 * n**2 - 1570683 * n * in - 4001354 * in * in;
-      let tmp = n.square().mul(198695283).sub(input.mul(n).mul(1570683)).sub(input.square().mul(4001354));
-      // return (502073021 * n**3 + in * tmp - remainder)/((n**2) * (10**9))
-      return Field(502073021).mul(n).mul(n).mul(n).add(input.mul(tmp)).sub(remainder).div(n.square().mul(1000000000));
+    method(input): Field {
+      return Field(502073021).add(Field(198695283).mul(input)).sub(Field(1570683).mul(input.square())).sub(Field(4001354).mul(input.sqrt().mul(input)));
   },
 },
 },
