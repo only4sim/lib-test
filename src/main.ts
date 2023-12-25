@@ -221,7 +221,7 @@ methods: {
 const zigmoid = (input: Field, n: Field): Field => {
   // tmp = 198695283 * n**2 - 1570683 * n * input - 4001354 * input * input;
   let tmp = n.square().mul(198695283).sub(input.mul(n).mul(1570683)).sub(input.square().mul(4001354));
-  //    out * (n**2) * (10**9) + remainder === 502073021 * n**3 + in * tmp;
+  // out * (n**2) * (10**9) + remainder === 502073021 * n**3 + in * tmp;
   let dividend = Field(502073021).mul(n).mul(n).mul(n).add(input.mul(tmp));
   let divisor = n.square().mul(1000000000);
   let remainder = dividend;
@@ -230,6 +230,10 @@ const zigmoid = (input: Field, n: Field): Field => {
       remainder = remainder.sub(divisor);
       quotient = quotient.add(Field(1));
   }
+  //assert(remainder < divisor);
+  remainder.assertLessThan(divisor);
+  //assert(quotient*divisor + remainder === dividend);
+  quotient.mul(divisor).add(remainder).assertEquals(dividend);
   return quotient;
 }
 
