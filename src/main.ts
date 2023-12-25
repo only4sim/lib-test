@@ -204,19 +204,34 @@ methods: {
 // });
 
 //Zigmoid 0.502073021 + 0.198695283 * x - 0.001570683 * x**2 - 0.004001354 * x**3
-const Zigmoid = ZkProgram({
-  name: 'Zigmoid',
-  publicOutput: Field,
-methods: {
-  zigmoid: {
-    privateInputs: [Field],
+// const Zigmoid = ZkProgram({
+//   name: 'Zigmoid',
+//   publicOutput: Field,
+// methods: {
+//   zigmoid: {
+//     privateInputs: [Field],
 
-    method(input): Field {
-      return Field(502073021).add(Field(198695283).mul(input)).sub(Field(1570683).mul(input.square())).sub(Field(4001354).mul(input.sqrt().mul(input)));
-  },
-},
-},
-});
+//     method(input): Field {
+//       return Field(502073021).add(Field(198695283).mul(input)).sub(Field(1570683).mul(input.square())).sub(Field(4001354).mul(input.sqrt().mul(input)));
+//   },
+// },
+// },
+// });
+
+const zigmoid = (input: Field, n: Field): Field => {
+  // tmp = 198695283 * n**2 - 1570683 * n * input - 4001354 * input * input;
+  let tmp = n.square().mul(198695283).sub(input.mul(n).mul(1570683)).sub(input.square().mul(4001354));
+  //    out * (n**2) * (10**9) + remainder === 502073021 * n**3 + in * tmp;
+  let dividend = Field(502073021).mul(n).mul(n).mul(n).add(input.mul(tmp));
+  let divisor = n.square().mul(1000000000);
+  let remainder = dividend;
+  let quotient = new Field(0);
+  while (remainder.greaterThan(divisor)) {
+      remainder = remainder.sub(divisor);
+      quotient = quotient.add(Field(1));
+  }
+  return quotient;
+}
 
 const DecisionTree = ZkProgram({
   name: 'DecisionTree',
@@ -303,7 +318,7 @@ const LogisticRegression = ZkProgram({
         }
 
         const z = dotProduct.add(intercept);
-        return Zigmoid.zigmoid(z);
+        return zigmoid(z);
     },
   },
 },
