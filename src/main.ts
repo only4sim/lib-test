@@ -17,7 +17,7 @@ import {
   Provable,
 } from 'o1js';
 
-import { ArgMax } from './argMax.js';
+// import { ArgMax } from '.Snarky-ML/ArgMax.js';
 
 async function main() {
 
