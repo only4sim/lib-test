@@ -17,16 +17,20 @@ import {
     Provable,
   } from 'o1js';
 
-const Relu = ZkProgram({
-    name: 'Relu',
-    publicOutput: Field,
-  methods: {
-    argMax: {
-      privateInputs: [Field],
+// const Relu = ZkProgram({
+//     name: 'Relu',
+//     publicOutput: Field,
+//   methods: {
+//     relu: {
+//       privateInputs: [Field],
 
-      method(input): Field {
-        return Provable.if(input.greaterThan(Field(0)), input , Field(0));
-    },
-  },
-},
-});
+//       method(input): Field {
+//         return Provable.if(input.greaterThan(Field(0)), input , Field(0));
+//     },
+//   },
+// },
+// });
+
+export const relu = (input: Field): Field => {
+      return Provable.if(input.greaterThan(Field(0)), input , Field(0));
+};
