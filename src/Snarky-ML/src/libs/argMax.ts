@@ -1,3 +1,9 @@
+// Creation Date: 2023-10-15
+// Last Update: 2023-12-30
+// Creator: only4sim
+// argMax function for Snarky-ML
+// argMax takes a Field array and outputs the positional index of the largest item. The index starts at 0.
+
 import {
     Field,
     Mina,

@@ -1,9 +1,37 @@
-function averagePooling2D(input, poolSize, strides) {
-    const [inputHeight, inputWidth] = input.shape;
+// Creation Date: 2023-10-15
+// Last Update: 2023-12-30
+// Creator: only4sim
+// averagePooling2D function for Snarky-ML
+// 
+
+
+import {
+    Field,
+    Mina,
+    PrivateKey,
+    AccountUpdate,
+    SelfProof,
+    ZkProgram,
+    Struct,
+    Bool,
+    Circuit,
+    Poseidon,
+    MerkleMap,
+    MerkleTree,
+    MerkleWitness,
+    MerkleMapWitness,
+    verify,
+    Provable,
+  } from 'o1js';
+
+
+export const averagePooling2D = (input: Field [][], poolSize: Field [], strides : Field []): Field [][] => {
+    const inputHeight = input.length;
+    const inputWidth = input[0].length;
     const [poolHeight, poolWidth] = poolSize;
     const [strideY, strideX] = strides;
 
-    const outputHeight = Math.floor((inputHeight - poolHeight) / strideY) + 1;
+    const outputHeight = Math.floor((inputHeight.sub(poolHeight) / strideY) + 1;
     const outputWidth = Math.floor((inputWidth - poolWidth) / strideX) + 1;
 
     const output = new Field(outputHeight, outputWidth);
