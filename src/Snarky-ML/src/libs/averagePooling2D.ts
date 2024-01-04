@@ -31,7 +31,7 @@ export const averagePooling2D = (input: Field [][], poolSize: Field [], strides 
     const [poolHeight, poolWidth] = poolSize;
     const [strideY, strideX] = strides;
 
-    const outputHeight = Math.floor((inputHeight.sub(poolHeight) / strideY) + 1;
+    const outputHeight = Math.floor((inputHeight.sub(poolHeight)() / strideY) + 1;
     const outputWidth = Math.floor((inputWidth - poolWidth) / strideX) + 1;
 
     const output = new Field(outputHeight, outputWidth);
