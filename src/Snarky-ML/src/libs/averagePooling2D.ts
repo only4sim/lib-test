@@ -22,20 +22,21 @@ import {
     MerkleMapWitness,
     verify,
     Provable,
+    UInt64,
   } from 'o1js';
 
 
-export const averagePooling2D = (input: Field [][], poolSize: Field [], strides : Field []): Field [][] => {
+export const averagePooling2D = (input: Field [][], poolSize: number [], strides : number []): Field [][] => {
     const inputHeight = input.length;
     const inputWidth = input[0].length;
     const [poolHeight, poolWidth] = poolSize;
     const [strideY, strideX] = strides;
 
-    const outputHeight = Math.floor((inputHeight.sub(poolHeight)() / strideY) + 1;
+    const outputHeight = Math.floor((inputHeight-poolHeight) / strideY) + 1;
     const outputWidth = Math.floor((inputWidth - poolWidth) / strideX) + 1;
 
     const output = new Field(outputHeight, outputWidth);
-
+    const output = new 
     for (let y = 0; y < outputHeight; y++) {
         for (let x = 0; x < outputWidth; x++) {
             let sum = new Field(0);
