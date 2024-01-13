@@ -1,31 +1,37 @@
-import { maxPooling2D } from './maxPooling2D'; // Import your maxPooling2D function from your implementation file
+import { Field } from 'o1js';
+import { maxPooling2D } from '../src/libs/maxPooling2D.js';
 
-describe('maxPooling2D', () => {
-    it('should perform 2D max pooling correctly', () => {
-        // Define input, pool size, strides, and expected output
-        const inputMatrix = [
-            [1, 2, 3, 4],
-            [5, 6, 7, 8],
-            [9, 10, 11, 12],
-            [13, 14, 15, 16]
-        ]; // Input 2D array
-
-        const poolSize = [2, 2]; // Pool size
-        const strides = [2, 2]; // Strides
-        const expectedOutput = [
-            [6, 8],
-            [14, 16]
-        ]; // Expected output
-
-        // Convert input to a Field (assuming you have a way to represent arrays as Fields)
-        const inputField = ...; // Convert inputMatrix to a Field
-
-        // Call the maxPooling2D function
-        const result = maxPooling2D(inputField, poolSize, strides);
-
-        // Assert that the result matches the expected output
-        expect(result.toArray()).toEqual(expectedOutput);
+describe('maxPooling2D function', () => {
+    it('performs max pooling correctly with pool size 2x2 and stride 2x2', () => {
+        const input = [
+            [new Field(1), new Field(2), new Field(3), new Field(4)],
+            [new Field(5), new Field(6), new Field(7), new Field(8)],
+            [new Field(9), new Field(10), new Field(11), new Field(12)],
+            [new Field(13), new Field(14), new Field(15), new Field(16)]
+        ];
+        const poolSize = [2, 2];
+        const strides = [2, 2];
+        const result = maxPooling2D(input, poolSize, strides);
+        const expected = [
+            [new Field(6), new Field(8)],
+            [new Field(14), new Field(16)]
+        ];
+        expect(result).toEqual(expected);
     });
 
-    // Add more test cases as needed
+    it('handles different stride values correctly', () => {
+        const input = [
+            [new Field(1), new Field(2), new Field(3)],
+            [new Field(4), new Field(5), new Field(6)],
+            [new Field(7), new Field(8), new Field(9)]
+        ];
+        const poolSize = [2, 2];
+        const strides = [1, 1];
+        const result = maxPooling2D(input, poolSize, strides);
+        const expected = [
+            [new Field(5), new Field(6)],
+            [new Field(8), new Field(9)]
+        ];
+        expect(result).toEqual(expected);
+    });
 });

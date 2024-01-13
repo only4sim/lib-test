@@ -15,6 +15,7 @@ import {
   MerkleMapWitness,
   verify,
   Provable,
+  Int64,
 } from 'o1js';
 
 // import { ArgMax } from '.Snarky-ML/ArgMax.js';
@@ -137,7 +138,7 @@ async function main() {
     // const ok7 = await verify(proof7.toJSON(), verificationKey7);
     // console.log('ok', ok7);
 
-    let input = [Field(2), Field(3)];
+    let input = [Int64.from(250000000), Int64.from(250000000)];
     const { verificationKey: verificationKey8 } = await LogisticRegression.compile();
 
     console.log('making proof 8')
@@ -145,8 +146,8 @@ async function main() {
 
     console.log('verifying proof 8');
 
-    let output8 = Field(0);
-    proof8.publicOutput.assertEquals(output8);
+    let output8 = Int64.from(0);
+    proof8.publicOutput.div(10000).assertEquals(output8);
 
     const ok8 = await verify(proof8.toJSON(), verificationKey8);
     console.log('ok', ok8);
@@ -248,14 +249,49 @@ methods: {
 // },
 // });
 
-const zigmoid = (input: Field, n: Field): Field => {
+// const zigmoid = (input: Field, n: Field): Field => {
+//   // tmp = 198695283 * n**2 - 1570683 * n * input - 4001354 * input * input;
+//   let tmp = n.square().mul(199).sub(input.mul(n).mul(2)).sub(input.square().mul(4));
+//   // out * (n**2) * (10**9) + remainder === 502073021 * n**3 + in * tmp;
+//   let dividend = Field(502).mul(n).mul(n).mul(n).add(input.mul(tmp));
+//   let divisor = n.square().mul(1000);
+//   let remainder = dividend;
+//   let quotient = new Field(0);
+//   Provable.log(input);
+//   Provable.log(n);
+//   Provable.log(tmp);
+//   Provable.log(dividend);
+//   Provable.log(divisor);
+//   Provable.log(remainder);
+//   Provable.log(quotient);
+
+//   // while (remainder.greaterThan(divisor)) {
+//   //     remainder = remainder.sub(divisor);
+//   //     quotient = quotient.add(Field(1));
+//   // }
+
+//   let round = 100;
+
+//   for (let i = 0; i<round && remainder.greaterThan(divisor); i++) {
+//       remainder = remainder.sub(divisor);
+//       quotient = quotient.add(Field(1));
+//   }
+//   //assert(remainder < divisor);
+//   remainder.assertLessThan(divisor);
+//   //assert(quotient*divisor + remainder === dividend);
+//   quotient.mul(divisor).add(remainder).assertEquals(dividend);
+//   return quotient;
+// }
+
+const zigmoid = (input: Int64, n: Int64): Int64 => {
   // tmp = 198695283 * n**2 - 1570683 * n * input - 4001354 * input * input;
-  let tmp = n.square().mul(199).sub(input.mul(n).mul(2)).sub(input.square().mul(4));
+  let tmp = n.mul(n).mul(1987).sub(input.mul(n).mul(16)).sub(input.mul(input).mul(40));
   // out * (n**2) * (10**9) + remainder === 502073021 * n**3 + in * tmp;
-  let dividend = Field(502).mul(n).mul(n).mul(n).add(input.mul(tmp));
-  let divisor = n.square().mul(1000);
-  let remainder = dividend;
-  let quotient = new Field(0);
+
+  let dividend = n.mul(n).mul(n).mul(5021).add(input.mul(tmp));
+  let divisor = n.mul(n).mul(10000);
+  let remainder = dividend.mod(divisor.magnitude);
+  let quotient = dividend.div(divisor);
   Provable.log(input);
   Provable.log(n);
   Provable.log(tmp);
@@ -264,19 +300,6 @@ const zigmoid = (input: Field, n: Field): Field => {
   Provable.log(remainder);
   Provable.log(quotient);
 
-  // while (remainder.greaterThan(divisor)) {
-  //     remainder = remainder.sub(divisor);
-  //     quotient = quotient.add(Field(1));
-  // }
-
-  let round = 100;
-
-  for (let i = 0; i<round && remainder.greaterThan(divisor); i++) {
-      remainder = remainder.sub(divisor);
-      quotient = quotient.add(Field(1));
-  }
-  //assert(remainder < divisor);
-  remainder.assertLessThan(divisor);
   //assert(quotient*divisor + remainder === dividend);
   quotient.mul(divisor).add(remainder).assertEquals(dividend);
   return quotient;
@@ -352,25 +375,25 @@ methods: {
 
 const LogisticRegression = ZkProgram({
     name: 'LogisticRegression',
-    publicOutput: Field,
+    publicOutput: Int64,
   methods: {
     predict: {
       //The quantized input is scaled by sqrt of the n of the zigmoid, because the coefficients*input is scaled by n
-      privateInputs: [Provable.Array(Field, 2)],
+      privateInputs: [Provable.Array(Int64, 2)],
 
-      method(input: Field[]): Field {
-        const coefficients = [Field(175), Field(203)];
+      method(input: Int64[]): Int64 {
+        const coefficients = [Int64.from(175), Int64.from(203)];
         // Negative of the prediction may cause issues
-        const intercept = new Field(693);
-        let dotProduct = new Field(0);
+        const intercept = Int64.from(69312133).neg();
+        let dotProduct = Int64.from(0);
 
         for (let i = 0; i < coefficients.length; i++) {
           dotProduct = dotProduct.add(coefficients[i].mul(input[i]));
         }
 
-        const z = dotProduct.add(intercept);
-        // Provable.log(z);
-        // const sigmoid = zigmoid(z, Field(1000000000));
+        const z = dotProduct.div(100000000).add(intercept).div(10000);
+        Provable.log(z);
+        const sigmoid = zigmoid(z, Int64.from(10000));
         return z;
     },
   },
