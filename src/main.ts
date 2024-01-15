@@ -138,20 +138,46 @@ async function main() {
     // const ok7 = await verify(proof7.toJSON(), verificationKey7);
     // console.log('ok', ok7);
 
-    let input = [Int64.from(250000000), Int64.from(250000000)];
-    const { verificationKey: verificationKey8 } = await LogisticRegression.compile();
+    // let input = [Int64.from(250000000), Int64.from(250000000)];
+    // const { verificationKey: verificationKey8 } = await LogisticRegression.compile();
 
-    console.log('making proof 8')
-    const proof8 = await LogisticRegression.predict(input);
+    // console.log('making proof 8')
+    // const proof8 = await LogisticRegression.predict(input);
 
-    console.log('verifying proof 8');
+    // console.log('verifying proof 8');
 
-    let output8 = Int64.from(0);
-    proof8.publicOutput.div(10000).assertEquals(output8);
+    // let output8 = Int64.from(0);
+    // proof8.publicOutput.div(10000).assertEquals(output8);
 
-    const ok8 = await verify(proof8.toJSON(), verificationKey8);
-    console.log('ok', ok8);
+    // const ok8 = await verify(proof8.toJSON(), verificationKey8);
+    // console.log('ok', ok8);
 
+
+    let input9 = [Int64.from(25), Int64.from(35)];
+    const { verificationKey: verificationKey9 } = await LinearRegression.compile();
+
+    console.log('making proof 9')
+    const proof9 = await LinearRegression.predict(input9);
+
+    console.log('verifying proof 9');
+
+    let output9 = Int64.from(3);
+    proof9.publicOutput.div(10).assertEquals(output9);
+
+    const ok9 = await verify(proof9.toJSON(), verificationKey9);
+    console.log('ok', ok9);
+
+    let input10 = [Int64.from(100), Int64.from(350)];
+
+    console.log('making proof 10')
+    const proof10 = await LinearRegression.predict(input10);
+
+    console.log('verifying proof 10');
+
+    Provable.log(proof10.publicOutput.div(10));
+
+    const ok10 = await verify(proof9.toJSON(), verificationKey9);
+    console.log('ok', ok10);
 
 
 
@@ -397,6 +423,31 @@ const LogisticRegression = ZkProgram({
         return z;
     },
   },
+},
+});
+
+const LinearRegression = ZkProgram({
+  name: 'LinearRegression',
+  publicOutput: Int64,
+methods: {
+  predict: {
+    //The quantized input is scaled by sqrt of the n of the zigmoid, because the coefficients*input is scaled by n
+    privateInputs: [Provable.Array(Int64, 2)],
+
+    method(input: Int64[]): Int64 {
+      const coefficients = [Int64.from(5), Int64.from(5)];
+      // Negative of the prediction may cause issues
+      const intercept = Int64.from(0);
+      let dotProduct = Int64.from(0);
+
+      for (let i = 0; i < coefficients.length; i++) {
+        dotProduct = dotProduct.add(coefficients[i].mul(input[i]));
+      }
+
+      const z = dotProduct.div(10).add(intercept); 
+      return z;
+  },
+},
 },
 });
 
