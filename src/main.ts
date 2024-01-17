@@ -20,6 +20,8 @@ import {
 
 // import { ArgMax } from '.Snarky-ML/ArgMax.js';
 
+import { Int64_s } from './int64_s.js';
+
 async function main() {
 
     console.log('o1js loaded');
@@ -178,6 +180,9 @@ async function main() {
 
     const ok10 = await verify(proof9.toJSON(), verificationKey9);
     console.log('ok', ok10);
+
+
+    // let input11 = new Int64_s(100);
 
 
 
