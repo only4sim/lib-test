@@ -6,10 +6,10 @@ import {
     UInt32, 
     Bool,
     Sign, 
+    Gadgets,
     Provable
   } from 'o1js';
 
-  import * as RangeCheck from 'o1js/gadgets/range-check.js';
 
 
 // external API
@@ -33,7 +33,7 @@ class Int64_s extends Int64 {
       let xMinusY = this.magnitude.sub(y.magnitude).seal();
       let yMinusX = xMinusY.neg();
 
-      let xMinusYFits = RangeCheck.isInRangeN(UInt64.NUM_BITS, xMinusY);
+      let xMinusYFits = Gadgets.isInRangeN(UInt64.NUM_BITS, xMinusY);
 
       let yMinusXFits = RangeCheck.isInRangeN(UInt64.NUM_BITS, yMinusX);
 
