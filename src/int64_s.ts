@@ -26,22 +26,22 @@ class Int64_s extends Int64 {
       /**
    * Checks if a {@link Int64} is less than or equal to another one.
    */
-  lessThanOrEqual(y: Int64) {
-    if (this.magnitude.isConstant() && y.magnitude.isConstant()) {
-      return Bool(this.magnitude.toBigInt() <= y.magnitude.toBigInt());
-    } else {
-      let xMinusY = this.magnitude.sub(y.magnitude).seal();
-      let yMinusX = xMinusY.neg();
+  // lessThanOrEqual(y: Int64) {
+  //   if (this.magnitude.isConstant() && y.magnitude.isConstant()) {
+  //     return Bool(this.magnitude.toBigInt() <= y.magnitude.toBigInt());
+  //   } else {
+  //     let xMinusY = this.magnitude.sub(y.magnitude).seal();
+  //     let yMinusX = xMinusY.neg();
 
-      let xMinusYFits = Gadgets.isInRangeN(UInt64.NUM_BITS, xMinusY);
+  //     let xMinusYFits = Gadgets.isInRangeN(UInt64.NUM_BITS, xMinusY);
 
-      let yMinusXFits = RangeCheck.isInRangeN(UInt64.NUM_BITS, yMinusX);
+  //     let yMinusXFits = RangeCheck.isInRangeN(UInt64.NUM_BITS, yMinusX);
 
-      xMinusYFits.or(yMinusXFits).assertEquals(true);
-      // x <= y if y - x fits in 64 bits
-      return yMinusXFits;
-    }
-  }
+  //     xMinusYFits.or(yMinusXFits).assertEquals(true);
+  //     // x <= y if y - x fits in 64 bits
+  //     return yMinusXFits;
+  //   }
+  // }
 
     // sqrt(): Int64_s {
     //     if (this.sgn === Sign.minusOne) {
