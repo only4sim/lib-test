@@ -18,9 +18,9 @@ import {
   Int64,
 } from 'o1js';
 
-// import { ArgMax } from '.Snarky-ML/ArgMax.js';
+import { argMax } from './Snarky-ML/src/libs/argMax.js';
 
-import { Int64_s } from './int64_s.js';
+// import { Int64_s } from './int64_s.js';
 
 async function main() {
 
@@ -453,6 +453,77 @@ methods: {
       return z;
   },
 },
+},
+});
+
+const RandomForest = ZkProgram({
+  name: 'RandomForest',
+  publicOutput: Field,
+methods: {
+  predict: {
+      privateInputs: [Field, Field],
+      method(feature1, feature2): Field {
+          let arr = Provable.Array(Field, 2);
+          let index = 0;
+          index = Provable.if (Field(0).eq(1), 
+               Provable.if(undefined!.lessThan(Field(50)), 
+                  Field(0)
+              , 
+                  Field(1)
+              )
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(1).eq(1), 
+              Field(0)
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(2).eq(1), 
+               Provable.if(undefined!.lessThan(Field(50)), 
+                  Field(0)
+              , 
+                  Field(1)
+              )
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(3).eq(1), 
+              Field(1)
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(4).eq(1), 
+              Field(1)
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(5).eq(1), 
+              Field(1)
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(6).eq(1), 
+              Field(1)
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(7).eq(1), 
+              Field(1)
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(8).eq(1), 
+               Provable.if(undefined!.lessThan(Field(50)), 
+                  Field(0)
+              , 
+                  Field(1)
+              )
+          );
+          arr[index]=arr[index]+1;
+          index = Provable.if (Field(9).eq(1), 
+               Provable.if(.lessThan(Field(50)), 
+                  Field(0)
+              , 
+                  Field(1)
+              )
+          );
+          arr[index]=arr[index]+1;
+          return argMax(arr);
+      },
+  },
 },
 });
 
